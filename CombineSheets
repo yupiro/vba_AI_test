@@ -35,7 +35,7 @@ Sub CombineSheets()
         If Not SourceWorksheet Is Nothing Then
             ' コピー元のシートが存在する場合、結合ファイルにコピーします
             Set TargetWorksheet = TargetWorkbook.Sheets.Add(, TargetWorkbook.Sheets(TargetWorkbook.Sheets.Count))
-            SourceWorksheet.Copy After:=TargetWorksheet
+            SourceWorksheet.UsedRange.Copy Destination:=TargetWorksheet.Range("A1")
             TargetWorksheet.Name = SourceWorkbook.Name & "_" & SheetName
         End If
         
