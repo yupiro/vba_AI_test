@@ -1,0 +1,54 @@
+Sub CombineSheets()
+    Dim SourceFolder As String
+    Dim TargetFile As String
+    Dim FileExtension As String
+    Dim FileName As String
+    Dim SourceWorkbook As Workbook
+    Dim TargetWorkbook As Workbook
+    Dim SourceWorksheet As Worksheet
+    Dim TargetWorksheet As Worksheet
+    
+    ' コピー元のフォルダと結合ファイルのパスを設定します
+    SourceFolder = "C:\SourceFolder\"
+    TargetFile = "C:\TargetFile.xlsm"
+    
+    ' コピーするシートの名前を設定します
+    Dim SheetName As String
+    SheetName = "Sheet1"
+    
+    ' フォルダ内のすべてのエクセルファイルに対して処理を行います
+    FileExtension = "*.xlsx" ' コピーするファイルの拡張子を指定します（ここではxlsxとしています）
+    FileName = Dir(SourceFolder & FileExtension)
+    
+    ' 結合ファイルを作成します
+    Set TargetWorkbook = Workbooks.Add
+    
+    Do While FileName <> ""
+        ' エクセルファイルを開きます
+        Set SourceWorkbook = Workbooks.Open(SourceFolder & FileName)
+        
+        ' コピー元のシートを取得します
+        On Error Resume Next ' 指定した名前のシートが存在しない場合、エラーを無視します
+        Set SourceWorksheet = SourceWorkbook.Sheets(SheetName)
+        On Error GoTo 0
+        
+        If Not SourceWorksheet Is Nothing Then
+            ' コピー元のシートが存在する場合、結合ファイルにコピーします
+            Set TargetWorksheet = TargetWorkbook.Sheets.Add(, TargetWorkbook.Sheets(TargetWorkbook.Sheets.Count))
+            SourceWorksheet.Copy After:=TargetWorksheet
+            TargetWorksheet.Name = SourceWorkbook.Name & "_" & SheetName
+        End If
+        
+        ' コピー元のファイルを閉じます
+        SourceWorkbook.Close SaveChanges:=False
+        
+        ' 次のファイルを取得します
+        FileName = Dir
+    Loop
+    
+    ' 結合ファイルを保存します
+    TargetWorkbook.SaveAs TargetFile
+    TargetWorkbook.Close SaveChanges:=False
+    
+    MsgBox "処理が完了しました。"
+End Sub
