@@ -2,32 +2,29 @@ Sub RemoveSpecifiedStrings()
     Dim ws As Worksheet
     Dim rngData As Range
     Dim rngCell As Range
-    Dim deleteValue As String
+    Dim deleteRange As Range
     
     ' シートを指定します（必要に応じて変更してください）
     Set ws = ThisWorkbook.Sheets("Sheet1")
     
-    ' 削除する値を指定します
-    deleteValue = "指定した文字列"
-    
     ' データの範囲を指定します（必要に応じて変更してください）
     Set rngData = ws.Range("A1:K1000")
     
-    ' O1:O10の範囲内で指定した文字列を削除します
+    ' O1:O10の範囲内で表内の値を検索し、削除対象の範囲を設定します
     For Each rngCell In ws.Range("O1:O10")
-        If rngCell.Value = deleteValue Then
-            rngCell.ClearContents ' 値を削除する場合
-            ' rngCell.Value = "" ' 値を空白にする場合
+        If rngCell.Value <> "" Then
+            If deleteRange Is Nothing Then
+                Set deleteRange = rngData.Cells.Find(rngCell.Value)
+            Else
+                Set deleteRange = Union(deleteRange, rngData.Cells.Find(rngCell.Value))
+            End If
         End If
     Next rngCell
     
-    ' データの範囲内で指定した文字列を削除します
-    For Each rngCell In rngData
-        If rngCell.Value = deleteValue Then
-            rngCell.ClearContents ' 値を削除する場合
-            ' rngCell.Value = "" ' 値を空白にする場合
-        End If
-    Next rngCell
+    ' 削除対象の範囲が存在する場合、値を削除します
+    If Not deleteRange Is Nothing Then
+        deleteRange.ClearContents ' セルの値を削除します
+    End If
     
     ' 完了メッセージを表示します
     MsgBox "指定した文字列の削除が完了しました。"
