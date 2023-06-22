@@ -1,0 +1,21 @@
+Sub WriteArrayToCells()
+    Dim myArray(1 To 10, 1 To 10) As String
+    Dim i As Long, j As Long
+    
+    ' 配列を文字列"-"で初期化します
+    For i = 1 To 10
+        For j = 1 To 10
+            myArray(i, j) = "-"
+        Next j
+    Next i
+    
+    ' 配列の値をセルに書き込みます
+    For i = 1 To 10
+        For j = 1 To 10
+            ThisWorkbook.Sheets("Sheet1").Cells(i, j).Value = myArray(i, j)
+        Next j
+    Next i
+    
+    ' 完了メッセージを表示します
+    MsgBox "配列の書き込みが完了しました。"
+End Sub
