@@ -1,0 +1,34 @@
+Sub RemoveSpecifiedStrings()
+    Dim ws As Worksheet
+    Dim rngData As Range
+    Dim rngCell As Range
+    Dim deleteValue As String
+    
+    ' シートを指定します（必要に応じて変更してください）
+    Set ws = ThisWorkbook.Sheets("Sheet1")
+    
+    ' 削除する値を指定します
+    deleteValue = "指定した文字列"
+    
+    ' データの範囲を指定します（必要に応じて変更してください）
+    Set rngData = ws.Range("A1:K1000")
+    
+    ' O1:O10の範囲内で指定した文字列を削除します
+    For Each rngCell In ws.Range("O1:O10")
+        If rngCell.Value = deleteValue Then
+            rngCell.ClearContents ' 値を削除する場合
+            ' rngCell.Value = "" ' 値を空白にする場合
+        End If
+    Next rngCell
+    
+    ' データの範囲内で指定した文字列を削除します
+    For Each rngCell In rngData
+        If rngCell.Value = deleteValue Then
+            rngCell.ClearContents ' 値を削除する場合
+            ' rngCell.Value = "" ' 値を空白にする場合
+        End If
+    Next rngCell
+    
+    ' 完了メッセージを表示します
+    MsgBox "指定した文字列の削除が完了しました。"
+End Sub
